@@ -13,26 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to AWS ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          registry: ${{ secrets.AWS_REGISTRY }}
-          region: ${{ secrets.AWS_REGION }}
-          registry-type: private
-          mask-password: true
-          skip-logout: true
-
-      - name: Build Docker image
+      - name: Pull Docker image from ECR
         run: |
-          docker build -t ${{ secrets.AWS_REGISTRY }}/my-image:latest .
-        
-      - name: Push Docker image to ECR
-        run: |
-          docker push ${{ secrets.AWS_REGISTRY }}/my-image:latest
+          docker pull 145556537869.dkr.ecr.us-east-1.amazonaws.com/my-web-service:latest
 
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f cluster.yaml
-        env:
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
