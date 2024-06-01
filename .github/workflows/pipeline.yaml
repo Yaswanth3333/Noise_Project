@@ -25,7 +25,4 @@ jobs:
       - name: Pull Docker image from ECR
         run: docker pull 145556537869.dkr.ecr.us-east-1.amazonaws.com/my-web-service:latest
 
-      # Deploy to Kubernetes
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f cluster.yaml
+      
