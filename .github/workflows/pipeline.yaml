@@ -19,11 +19,11 @@ jobs:
 
       # Authenticate Docker with Amazon ECR
       - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${ECR_URL}
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 145556537869.dkr.ecr.us-east-1.amazonaws.com/my-web-service:latest
 
       # Pull Docker image from Amazon ECR
       - name: Pull Docker image from ECR
-        run: docker pull ${ECR_URL}/my-web-service:latest
+        run: docker pull 145556537869.dkr.ecr.us-east-1.amazonaws.com/my-web-service:latest
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
