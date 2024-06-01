@@ -13,19 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Configure AWS credentials
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: AKIASDY6YQIGTYS42QFX
-          aws-secret-access-key: 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
-          aws-region: us-east-1
+        run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set region ${{ secrets.AWS_REGION }}
 
+      # Authenticate Docker with Amazon ECR
+      - name: Login to Amazon ECR
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${ECR_URL}
+
+      # Pull Docker image from Amazon ECR
       - name: Pull Docker image from ECR
-        run: |
-          docker pull 145556537869.dkr.ecr.us-east-1.amazonaws.com/my-web-service:latest
-      
+        run: docker pull ${ECR_URL}/my-web-service:latest
 
-
+      # Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f cluster.yaml
