@@ -19,7 +19,7 @@ jobs:
         with:
           registry: ${{ secrets.AWS_REGISTRY }}
           region: ${{ secrets.AWS_REGION }}
-          registry-type: 'Amazon'
+          registry-type: private
           mask-password: true
           skip-logout: true
 
