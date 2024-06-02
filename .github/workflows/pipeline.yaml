@@ -45,8 +45,17 @@ jobs:
           chmod +x minikube
           sudo mv minikube /usr/local/bin/
 
+      # Install Go 1.20
+      - name: Install Go 1.20
+        run: |
+          wget https://go.dev/dl/go1.20.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
+          echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
+          
       # Install cri-dockerd
       - name: Install cri-dockerd
+        env:
+          PATH: ${{ env.PATH }}:/usr/local/go/bin
         run: |
           sudo apt-get install -y golang-go
           git clone https://github.com/Mirantis/cri-dockerd.git
