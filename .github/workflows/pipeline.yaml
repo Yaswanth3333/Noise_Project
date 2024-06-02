@@ -38,8 +38,14 @@ jobs:
       # Install containernetworking-plugins
       - name: Install containernetworking-plugins
         run: |
-          sudo apt-get update
-          sudo apt-get install -y containernetworking-plugins
+          CNI_PLUGIN_VERSION="v1.5.0"
+          CNI_PLUGIN_TAR="cni-plugins-linux-amd64-$CNI_PLUGIN_VERSION.tgz" # change arch if not on amd64
+          CNI_PLUGIN_INSTALL_DIR="/opt/cni/bin"
+          
+          curl -LO "https://github.com/containernetworking/plugins/releases/download/$CNI_PLUGIN_VERSION/$CNI_PLUGIN_TAR"
+          sudo mkdir -p "$CNI_PLUGIN_INSTALL_DIR"
+          sudo tar -xf "$CNI_PLUGIN_TAR" -C "$CNI_PLUGIN_INSTALL_DIR"
+          rm "$CNI_PLUGIN_TAR"
 
       # Install conntrack
       - name: Install conntrack
@@ -65,13 +71,6 @@ jobs:
           sudo mv bin/cri-dockerd /usr/local/bin/
           cd ..
 
-      # Install kubectl
-      - name: Install kubectl
-        run: |
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
       # Start Minikube with containernetworking-plugins
       - name: Start Minikube
         run: |
@@ -80,6 +79,9 @@ jobs:
       # Configure kubectl
       - name: Set up kubectl
         run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
           kubectl cluster-info
 
       # Deploy to Kubernetes
