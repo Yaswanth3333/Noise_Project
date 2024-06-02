@@ -54,17 +54,16 @@ jobs:
          
       # Install cri-dockerd
       - name: Install cri-dockerd
-        env:
-          PATH: ${{ env.PATH }}:/usr/local/go/bin
         run: |
-         sudo apt-get update
-         sudo apt-get install -y golang-go
-         git clone https://github.com/Mirantis/cri-dockerd.git
-         cd cri-dockerd
-         mkdir bin
-         go get && go build -o bin/cri-dockerd
-         sudo mv bin/cri-dockerd /usr/local/bin/
-         cd ..
+          sudo apt-get update
+          sudo apt-get install -y golang-go
+          git clone https://github.com/Mirantis/cri-dockerd.git
+          cd cri-dockerd
+          mkdir bin
+          go get && go build -o bin/cri-dockerd
+          sudo mv bin/cri-dockerd /usr/local/bin/
+          cd ..
+
       - name: Start Minikube
         run: |
           sudo minikube start --driver=ssh
