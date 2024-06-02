@@ -16,7 +16,7 @@ jobs:
       - name: Install AWS CLI AND GIT
         run: |
           sudo apt-get update
-          sudo apt-get install -y awscli git
+          sudo apt-get install -y awscli
 
       # Configure AWS credentials
       - name: Configure AWS Credentials
@@ -58,6 +58,7 @@ jobs:
         env:
           PATH: ${{ env.PATH }}:/usr/local/go/bin
         run: |
+          sudo apt-get install -y git
           git clone https://github.com/Mirantis/cri-dockerd.git
           cd cri-dockerd
           mkdir bin
