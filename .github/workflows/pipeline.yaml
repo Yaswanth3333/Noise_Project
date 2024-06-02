@@ -75,14 +75,16 @@ jobs:
       # Start Minikube 
       - name: Start Minikube
         run: |
+          echo "Starting Minikube"
           #sudo systemctl start minikube
           #sudo minikube stop
-          sudo minikube start --driver=none --force
+         # sudo minikube start --driver=none --force
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
+          echo "Successfully deployed"
           #kubectl create deployment nginx-deployment --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
           #kubectl expose deployment nginx-deployment --type=NodePort --port=80
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+          #kubectl apply -f deployment.yaml
+          #kubectl apply -f service.yaml
