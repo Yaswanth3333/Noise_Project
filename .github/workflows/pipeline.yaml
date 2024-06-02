@@ -71,6 +71,13 @@ jobs:
           sudo mv bin/cri-dockerd /usr/local/bin/
           cd ..
 
+      # Install cri-docker and start its socket
+      - name: Install cri-docker and start its socket
+        run: |
+          sudo apt-get install -y cri-docker
+          sudo systemctl enable cri-docker.socket
+          sudo systemctl start cri-docker.socket
+
       # Start Minikube with containernetworking-plugins
       - name: Start Minikube
         run: |
