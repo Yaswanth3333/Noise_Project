@@ -55,7 +55,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          sudo minikube start --driver=none
+          sudo minikube start 
 
       # Configure kubectl
       - name: Set up kubectl
