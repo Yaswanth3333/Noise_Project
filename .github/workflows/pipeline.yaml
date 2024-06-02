@@ -35,7 +35,7 @@ jobs:
         run: |
           docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
 
-      # Set up Minikube
+      # Set up Minikube and Install Go 1.20 and cri-dockerd
       - name: Set up Minikube and Install Go 1.20 and cri-dockerd
         run: |
           sudo apt-get install -y conntrack
@@ -44,13 +44,12 @@ jobs:
           curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           chmod +x minikube
           sudo mv minikube /usr/local/bin/
-          wget https://go.dev/dl/go1.20.linux-amd64.tar.gz
+          wget https://golang.org/dl/go1.20.linux-amd64.tar.gz
           sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
           echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
           sudo apt-get update
-          sudo apt-get install -y golang-go git
+          sudo apt-get install -y git
           git clone https://github.com/Mirantis/cri-dockerd.git
-          /bin/mkdir cri-dockerd/bin
           cd cri-dockerd
           go get && go build -o bin/cri-dockerd
           sudo mv bin/cri-dockerd /usr/local/bin/
