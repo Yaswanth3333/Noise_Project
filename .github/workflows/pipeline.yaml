@@ -75,7 +75,6 @@ jobs:
       # Start Minikube forcefully
       - name: Start Minikube
         run: |
-          sudo systemctl enable minikube
           sudo systemctl start minikube
           sudo minikube stop
           sudo minikube start --driver=none --force
