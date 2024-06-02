@@ -71,30 +71,19 @@ jobs:
           sudo mv bin/cri-dockerd /usr/local/bin/
           cd ..
 
-      # Install containerd and start its service
-      - name: Install containerd and start its service
+      # Set up Minikube service and socket
+      - name: Set up Minikube service and socket
         run: |
-          sudo apt-get update
-          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-          sudo apt-get update
-          sudo apt-get install -y containerd.io
-          sudo systemctl enable containerd
-          sudo systemctl start containerd
+          sudo cp /usr/local/bin/minikube /usr/local/bin/kubectl /usr/bin/
+          sudo cp /usr/local/bin/minikube /usr/local/bin/kubectl /usr/bin/
+          sudo curl -Lo /etc/systemd/system/minikube.service https://storage.googleapis.com/minikube/releases/latest/minikube-none.service
+          sudo systemctl daemon-reload
 
-      # Start Minikube with containernetworking-plugins
+      # Start Minikube
       - name: Start Minikube
         run: |
-          sudo minikube start --driver=none --extra-config=kubeadm.ignore-preflight-errors=SystemVerification,DirAvailable--etc-cni-netd,FileAvailable--etc-cni-netd-10-mynet.conflist
-
-      # Configure kubectl
-      - name: Set up kubectl
-        run: |
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-          kubectl cluster-info
+          sudo systemctl enable minikube
+          sudo systemctl start minikube
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
