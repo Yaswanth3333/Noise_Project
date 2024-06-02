@@ -52,14 +52,14 @@ jobs:
           sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
           echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
           sudo apt-get update
-          sudo apt-get install -y golang-go
+          sudo apt-get install -y golang-go git
+          git clone https://github.com/Mirantis/cri-dockerd.git
          
       # Install cri-dockerd
       - name: Install cri-dockerd
         env:
           PATH: ${{ env.PATH }}:/usr/local/go/bin
         run: |
-          git clone https://github.com/Mirantis/cri-dockerd.git
           cd cri-dockerd
           mkdir bin
           go get && go build -o bin/cri-dockerd
@@ -68,7 +68,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          sudo minikube start --driver=ssh
+          sudo minikube start --driver=none
 
       # Configure kubectl
       - name: Set up kubectl
