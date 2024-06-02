@@ -71,19 +71,14 @@ jobs:
           sudo mv bin/cri-dockerd /usr/local/bin/
           cd ..
 
-      # Set up Minikube service and socket
-      - name: Set up Minikube service and socket
-        run: |
-          sudo cp /usr/local/bin/minikube /usr/local/bin/kubectl /usr/bin/
-          sudo cp /usr/local/bin/minikube /usr/local/bin/kubectl /usr/bin/
-          sudo curl -Lo /etc/systemd/system/minikube.service https://storage.googleapis.com/minikube/releases/latest/minikube-none.service
-          sudo systemctl daemon-reload
 
-      # Start Minikube
+      # Start Minikube forcefully
       - name: Start Minikube
         run: |
           sudo systemctl enable minikube
           sudo systemctl start minikube
+          sudo minikube stop
+          sudo minikube start --driver=none --force
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
