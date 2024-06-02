@@ -46,7 +46,7 @@ jobs:
           sudo mv minikube /usr/local/bin/
 
       # Install Go 1.20 and cri-dockerd
-      - name: Install Go 1.20
+      - name: Install Go 1.20 and cri-dockerd
         run: |
           wget https://go.dev/dl/go1.20.linux-amd64.tar.gz
           sudo tar -C /usr/local -xzf go1.20.linux-amd64.tar.gz
@@ -55,16 +55,12 @@ jobs:
           sudo apt-get install -y golang-go git
           git clone https://github.com/Mirantis/cri-dockerd.git
          
-      # Install cri-dockerd
-      - name: Install cri-dockerd
-        env:
-          PATH: ${{ env.PATH }}:/usr/local/go/bin
+     # Configure cri-dockerd
+      - name: Configure cri-dockerd
         run: |
-          cd cri-dockerd
-          mkdir bin
-          go get && go build -o bin/cri-dockerd
-          sudo mv bin/cri-dockerd /usr/local/bin/
-          cd ..
+            /bin/mkdir cri-dockerd/bin
+            go get && go build -o cri-dockerd/bin/cri-dockerd
+            sudo mv cri-dockerd/bin/cri-dockerd /usr/local/bin/
 
       - name: Start Minikube
         run: |
