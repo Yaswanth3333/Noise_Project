@@ -72,17 +72,17 @@ jobs:
           cd ..
 
 
-      # Start Minikube forcefully
-      #- name: Start Minikube
-        #run: |
+      # Start Minikube 
+      - name: Start Minikube
+        run: |
           #sudo systemctl start minikube
           #sudo minikube stop
-          #sudo minikube start --driver=none --force
+          sudo minikube start --driver=none --force
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
         run: |
-          kubectl create deployment nginx-deployment --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
-          kubectl expose deployment nginx-deployment --type=NodePort --port=80
+          #kubectl create deployment nginx-deployment --image=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+          #kubectl expose deployment nginx-deployment --type=NodePort --port=80
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
