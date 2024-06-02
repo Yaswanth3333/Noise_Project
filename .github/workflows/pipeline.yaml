@@ -71,12 +71,17 @@ jobs:
           sudo mv bin/cri-dockerd /usr/local/bin/
           cd ..
 
-      # Install cri-containerd and start its socket
-      - name: Install cri-containerd and start its socket
+      # Install containerd and start its service
+      - name: Install containerd and start its service
         run: |
-          sudo apt-get install -y cri-containerd
-          sudo systemctl enable cri-containerd.socket
-          sudo systemctl start cri-containerd.socket
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y containerd.io
+          sudo systemctl enable containerd
+          sudo systemctl start containerd
 
       # Start Minikube with containernetworking-plugins
       - name: Start Minikube
